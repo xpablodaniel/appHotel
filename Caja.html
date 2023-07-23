@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rendición del Día en Efectivo</title>
+<link rel="icon" type="image/png" href="pesos.png">
+
+
+  <style>
+	body {
+            font-family: Arial, sans-serif;
+        }
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 400px;
+      height: 200px;
+      margin: 50px auto;
+      padding: 20px;
+      font-size: 110%;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+    display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      width: 75px;
+      height: 75px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img class="logo" src="cashTr.png" alt="Suteba Logo" onclick="handleFileSelect()">
+    <h1>Rendición Caja Diaria</h1>
+    <p id="rendicion"></p>
+  </div>
+
+  <script>
+    function handleFileSelect() {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.csv';
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const lines = reader.result.split('\n');
+          let efectivoSum = 0;
+          let tarjetaSum = 0;
+
+          for (let i = 1; i < lines.length; i++) {
+            const columns = lines[i].split(',');
+            if (columns.length >= 6) {
+              const importe = parseFloat(columns[5].replace(',', '.'));
+              if (!isNaN(importe)) {
+                if (columns[3] && columns[3].trim() === 'Caja Seccional') { // Ajusta el índice para la columna "Medio de cobranza"
+                  efectivoSum += importe;
+                } else {
+                  tarjetaSum += importe;
+                }
+              }
+            }
+          }
+
+          const totalSum = efectivoSum + tarjetaSum;
+
+          const rendicionElement = document.getElementById('rendicion');
+          rendicionElement.innerHTML = `
+            Efectivo: $${efectivoSum.toFixed(2)}<br>
+            Tarjeta: $${tarjetaSum.toFixed(2)}<br>
+            Total de recaudación: $${totalSum.toFixed(2)}
+          `;
+        };
+
+        reader.readAsText(file);
+      });
+
+      fileInput.click();
+    }
+  </script>
+</body>
+</html>
+
+
+

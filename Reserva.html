@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservas que ingresan</title>
+    <link rel="icon" type="image/png" href="reservaPencil.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin: 35px;
+        }
+
+        .logo img {
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+        }
+
+        #resultContainer {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        #resultOutput {
+            background-color: #f4f4f4;
+            padding: 10px;
+            white-space: pre-wrap;
+            margin-top: 20px; /* Margen superior agregado */
+            font-size: 20px; /* Tamaño de fuente agregado */
+            font-family: Arial, sans-serif; /* Fuente agregada */
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="reservaCalendar.png" alt="Reserva Logo" onclick="handleFileSelect()">
+    </div>
+    <h1>Reservas que Ingresan Hoy</h1>
+    <div id="resultContainer">
+        <h2>Listado de Reservas</h2>
+        <pre id="resultOutput"></pre>
+    </div>
+
+    <script>
+        function handleFileSelect() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.csv';
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    const fileContents = reader.result;
+                    const processedData = processData(fileContents);
+
+                    const resultOutput = document.getElementById('resultOutput');
+                    resultOutput.innerHTML = processedData;
+
+                    const downloadButton = document.createElement('button');
+                    downloadButton.textContent = 'Guardar como archivo';
+                    downloadButton.addEventListener('click', () => {
+                        const csvData = addHeadersToCSV(processedData);
+                        downloadCSV(stripHTML(csvData), 'reservas_ingresan.csv');
+                    });
+
+                    resultOutput.appendChild(downloadButton);
+                };
+
+                reader.readAsText(file);
+            });
+
+            fileInput.click();
+        }
+
+        function processData(fileContents) {
+            var lines = fileContents.split('\n');
+            var output = '';
+            var roomCount = {}; // Objeto para contar la cantidad de habitaciones ocupadas
+            var peopleCount = 0; // Variable para contar la cantidad total de personas
+
+            for (var i = 1; i < lines.length; i++) {
+                var line = lines[i].trim(); // Elimina espacios en blanco al inicio y final de la línea
+
+                if (line !== '') { // Omitir líneas vacías
+                    var fields = line.split(',');
+
+                    var roomNumber = fields[2];
+                    var passengerName = fields[13];
+                    var services = fields[16];
+		     var state = fields[23];
+                    var relevantFields = [
+                        '<b>' + roomNumber + '</b>',
+                        fields[8],
+                        fields[9],
+                        fields[5],
+                        fields[11],
+                        fields[12],
+                        '<b>' + passengerName + '</b>',
+
+                        fields[14],
+                        fields[6],
+                        services,
+                        '<span style="color: red;">' + state + '</span>', // Campo 23 con color rojo,
+                        fields[17],
+                        fields[7],
+                        fields[4]
+                    ];
+                    output += relevantFields.join(',') + '\n';
+
+                    if (roomCount[roomNumber]) {
+                        // Si la habitación ya ha sido contada, incrementa el contador de personas
+                        roomCount[roomNumber]++;
+                    } else {
+                        // Si la habitación no ha sido contada, inicializa el contador de personas en 1
+                        roomCount[roomNumber] = 1;
+                    }
+
+                    peopleCount++;
+                }
+            }
+
+            // Agrega las estadísticas de habitaciones ocupadas y cantidad de personas al output
+            output += 'Habitaciones que se ocupan: ' + Object.keys(roomCount).length + '\n';
+            output += 'Cantidad de pax: ' + peopleCount + '\n';
+
+            return output;
+        }
+
+        function addHeadersToCSV(csvData) {
+            var headers = 'Nro. habitación,Fecha de ingreso,Fecha de egreso,Cantidad plazas,Tipo documento,Nro. doc.,Apellido y nombre,Edad,Voucher,Servicio,Estado,Paquete,Sede,Observación habitación\n';
+            return headers + csvData;
+        }
+
+        function stripHTML(html) {
+            var temporalDivElement = document.createElement('div');
+            temporalDivElement.innerHTML = html;
+
+            // Eliminar el conteo final de habitaciones y pasajeros
+            var lines = temporalDivElement.innerText.split('\n');
+            lines = lines.slice(0, lines.length - 3); // Omitir las últimas dos líneas
+
+            return lines.join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            var csvFile = new Blob([csv], { type: 'text/csv' });
+
+            if (window.navigator.msSaveBlob) {
+                // IE 10+
+                window.navigator.msSaveBlob(csvFile, filename);
+            } else {
+                // Otros navegadores
+                var downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(csvFile);
+                downloadLink.setAttribute('download', filename);
+                downloadLink.click();
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
