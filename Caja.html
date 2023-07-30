@@ -20,6 +20,16 @@
       border-radius: 10px;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     }
+    
+    #rendicion {
+      font-size: 25px;
+      
+      background-color: #f2f2f2;
+      padding: 5px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+    
     .logo {
       display: flex;
       flex-direction: column;
@@ -27,7 +37,7 @@
       justify-content: center;
       width: 70px;
       height: 70px;
-      margin-bottom: 5px;
+      margin: 5px;
       cursor: pointer;
     }
     .logo:hover {
@@ -57,10 +67,14 @@
     <button id="btnGuardar" onclick="guardarPlanillaIngreso()">Guardar para Planilla de Ingresos</button>
   </div>
 
-  <script>
+
+<script>
     // Agrega este arreglo al principio del script
     let cajaSeccionalData = [];
-  
+    let efectivoSum = 0; // Variable para almacenar la suma de valores en "Caja Seccional"
+    let tarjetaSum = 0; // Variable para almacenar la suma de valores en otras formas de pago
+    let lines; // Variable para almacenar los datos originales del archivo CSV
+
     function handleFileSelect() {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
@@ -71,12 +85,10 @@
 
         // Especificamos la codificación UTF-8 para evitar problemas con caracteres especiales
         reader.readAsText(file, 'UTF-8');
-  
+
         reader.onload = () => {
-          const lines = reader.result.split('\n');
-          let efectivoSum = 0;
-          let tarjetaSum = 0;
-  
+          lines = reader.result.split('\n');
+
           for (let i = 1; i < lines.length; i++) {
             const columns = lines[i].split(',');
             if (columns.length >= 10) { // Asegúrate de que el archivo CSV tenga al menos 10 columnas
@@ -88,7 +100,9 @@
               const notaCredito = columns[8];
               const referencia = columns[6]; // Mantenemos la referencia como cadena de texto
               const usuarioAlta = columns[7];
-  
+              const lote = ''; // Columna Lote vacía
+              const cupon = ''; // Columna Cupon vacía
+
               if (!isNaN(importe)) {
                 if (columns[3] && columns[3].trim() === 'Caja Seccional') {
                   efectivoSum += importe;
@@ -97,11 +111,13 @@
                     nroRecibo,
                     fechaRecibo,
                     nombre,
-                    importe,
-                    medioCobranza,
                     notaCredito,
                     referencia,
-                    usuarioAlta
+                    importe,
+                    medioCobranza,
+                    usuarioAlta,
+                    lote,
+                    cupon
                   });
                 } else {
                   tarjetaSum += importe;
@@ -109,9 +125,9 @@
               }
             }
           }
-  
+
           const totalSum = efectivoSum + tarjetaSum;
-  
+
           const rendicionElement = document.getElementById('rendicion');
           rendicionElement.innerHTML = `
             Efectivo: $${efectivoSum.toFixed(2)}<br>
@@ -120,41 +136,53 @@
           `;
         };
       });
-  
+
       fileInput.click();
     }
 
-    function guardarPlanillaIngreso() {
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      // Agregamos la primera fila que contiene los nombres de las columnas
-      csvContent += 'Nro. recibo, Fecha recibo, Nombre, Medio de cobranza, Importe, Referencia, Nota crédito, Usuario alta\n';
-    
-      // Recorremos los datos de cajaSeccionalData y los convertimos en filas CSV
-      cajaSeccionalData.forEach((item) => {
-        // Escapamos las comas en los valores para evitar conflictos con el formato CSV
-        const fila = `${item.nroRecibo}, ${item.fechaRecibo}, ${item.nombre}, ${item.medioCobranza}, ${item.importe}, "${item.referencia}", ${item.notaCredito}, ${item.usuarioAlta}\n`;
-        csvContent += fila;
-      });
-    
-      // Creamos un Blob con el contenido CSV
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'planilla_ingreso.csv');
-      link.style.display = 'none'; // Ocultamos el enlace en pantalla
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link); // Removemos el enlace después de la descarga
+   function guardarPlanillaIngreso() {
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  // Agregamos la primera fila que contiene los nombres de las columnas
+  csvContent += 'Nro. recibo, Fecha recibo, Nombre, Nota crédito, Referencia, Lote, Cupon, Importe, Medio de cobranza, Usuario alta\n';
+
+  // Recorremos los datos originales del archivo CSV en orden inverso y los convertimos en filas CSV
+  for (let i = lines.length - 1; i >= 1; i--) {
+    const columns = lines[i].split(',');
+    if (columns.length >= 10) { // Asegúrate de que el archivo CSV tenga al menos 10 columnas
+      const nroRecibo = columns[0];
+      const fechaRecibo = columns[4];
+      const nombre = columns[1];
+      const importe = parseFloat(columns[5].replace(',', '.'));
+      const medioCobranza = columns[3];
+      const notaCredito = columns[8];
+      const referencia = columns[6]; // Mantenemos la referencia como cadena de texto
+      const usuarioAlta = columns[7];
+      const lote = ''; // Columna Lote vacía
+      const cupon = ''; // Columna Cupon vacía
+
+      // Escapamos las comas en los valores para evitar conflictos con el formato CSV
+      const fila = `${nroRecibo}, ${fechaRecibo}, ${nombre}, ${notaCredito}, "${referencia}", ${lote}, ${cupon}, ${importe}, ${medioCobranza}, ${usuarioAlta}\n`;
+      csvContent += fila;
     }
-    
+  }
+
+  // Creamos un Blob con el contenido CSV
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', 'planilla_ingreso.csv');
+  link.style.display = 'none'; // Ocultamos el enlace en pantalla
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link); // Removemos el enlace después de la descarga
+}
 
 
   </script>
+
   
 </body>
 </html>
-
-
 
 
 
