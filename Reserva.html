@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Reservas que ingresan</title>
     <link rel="icon" type="image/png" href="reservaPencil.png">
     <style>
+        /* Estilos para el botón de guardar */
+        #btnGuardar {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #btnGuardar:hover {
+            background-color: #45a049;
+        }
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -34,12 +51,13 @@
             background-color: #f4f4f4;
             padding: 10px;
             white-space: pre-wrap;
-            margin-top: 20px; /* Margen superior agregado */
-            font-size: 20px; /* Tamaño de fuente agregado */
-            font-family: Arial, sans-serif; /* Fuente agregada */
+            margin-top: 20px;
+            font-size: 20px;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
+
 <body>
     <div class="logo">
         <img src="reservaCalendar.png" alt="Reserva Logo" onclick="handleFileSelect()">
@@ -66,14 +84,18 @@
                     const resultOutput = document.getElementById('resultOutput');
                     resultOutput.innerHTML = processedData;
 
-                    const downloadButton = document.createElement('button');
-                    downloadButton.textContent = 'Guardar como archivo';
-                    downloadButton.addEventListener('click', () => {
-                        const csvData = addHeadersToCSV(processedData);
-                        downloadCSV(stripHTML(csvData), 'reservas_ingresan.csv');
-                    });
+                    const downloadButton = document.getElementById('btnGuardar');
+                    if (!downloadButton) {
+                        const newDownloadButton = document.createElement('button');
+                        newDownloadButton.textContent = 'Guardar como archivo';
+                        newDownloadButton.id = 'btnGuardar';
+                        newDownloadButton.addEventListener('click', () => {
+                            const csvData = addHeadersToCSV(processedData);
+                            downloadCSV(stripHTML(csvData), 'reservas_ingresan.csv');
+                        });
 
-                    resultOutput.appendChild(downloadButton);
+                        resultOutput.appendChild(newDownloadButton);
+                    }
                 };
 
                 reader.readAsText(file);
@@ -97,17 +119,22 @@
                     var roomNumber = fields[2];
                     var passengerName = fields[13];
                     var services = fields[16];
-		     var state = fields[23];
+                    var state = fields[23];
+                    var din = fields[8];
+                    var dout = fields[9];
+                    var age = fields[14];
+                    var dni = fields[12];
+
                     var relevantFields = [
                         '<b>' + roomNumber + '</b>',
-                        fields[8],
-                        fields[9],
+                        din,
+                        dout,
                         fields[5],
                         fields[11],
-                        fields[12],
+                        dni,
                         '<b>' + passengerName + '</b>',
 
-                        fields[14],
+                        age,
                         fields[6],
                         services,
                         '<span style="color: red;">' + state + '</span>', // Campo 23 con color rojo,
@@ -168,8 +195,7 @@
         }
     </script>
 </body>
+
 </html>
-
-
 
 
