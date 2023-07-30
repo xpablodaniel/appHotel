@@ -1,76 +1,206 @@
-
-            
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Reservas que ingresan</title>
     <link rel="icon" type="image/png" href="reservaPencil.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+	<meta charset="UTF-8">
+
     <style>
-        /* Estilos para el botón de guardar */
-        #btnGuardar {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #btnGuardar:hover {
-            background-color: #45a049;
-        }
-
         body {
             font-family: Arial, sans-serif;
         }
 
-        h1 {
+        .h1-initial {
+            text-align: center;
+        }
+	
+        .h2-initial {
             text-align: center;
         }
 
-        .logo {
+        .logo-initial {
             display: flex;
             justify-content: center;
             margin: 35px;
         }
 
-        .logo img {
-            width: 70px;
-            height: 70px;
+        .logo-initial img {
+            width: 120px;
             cursor: pointer;
+        }
+        
+        .button-print {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-print button {
+            margin: 0 auto;
+        }
+	
+	
+    .roomNumberContent {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(9, auto);
+            gap: 2px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 5px;
+            margin: 15px;
+            background-color: #f4f4f4;
+            font-size: 11px;
+            
+        }
+
+        .h1-container {
+            grid-column: 1 / span 4;
+            grid-row: 1;
+            margin: 0;
+            font-size: 20px;
+            font-family: "Times New Roman", Times, serif;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .logo-container img {
+            width: 145px;
+        }
+
+        .logo-container {
+            grid-column: 4 / -1;
+            grid-row: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .container .p-cena {
+            grid-column: 1 / span 6;
+            grid-row: 2;
+        }
+
+        .container .passengerName {
+            grid-column: 1 / span 4;
+            grid-row: 3;
+            justify-content: center;
+        }
+
+        .container .dni {
+            grid-column: 5 / -1;
+            grid-row: 3;
+            
+        }
+
+        .container .hotel {
+            grid-column: 1 / span 6;
+            grid-row: 4;
+            justify-content: center;
+        }
+
+        .container .din {
+            grid-column: 3 / -2;
+            grid-row: 5;
+            justify-content: center;
+        }
+
+        .container .dout {
+            grid-column: 5 / -1;
+            grid-row: 5;
+        }
+
+        .container .roomNumber {
+            grid-column: 1 / span 2;
+            grid-row: 5;
+        }
+
+        .container .cantp {
+            grid-column: 5 / -1;
+            grid-row: 6;
+        }
+
+        .container .p-servicios {
+            grid-column: 1 / span 3;
+            grid-row: 7;
+        }
+
+        .container .cantMap {
+            grid-column: 5 / -1;
+            grid-row: 7;
+        }
+
+        .check-container img {
+            width: 250px;
+        }
+
+
+        .check-container {
+            grid-column: 1 / span 6;
+            grid-row: 8;
+            display: flex;
+            justify-content: flex-start;
         }
 
         #resultContainer {
-            margin: 20px auto;
+            margin: 5px auto;
             max-width: 800px;
             text-align: center;
         }
 
         #resultOutput {
-            background-color: #f4f4f4;
             padding: 10px;
             white-space: pre-wrap;
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 5px;
+            font-size: 15px;
             font-family: Arial, sans-serif;
+            text-align: left;
+        }
+
+        #downloadButton {
+            margin-top: 20px;
+        }
+
+        @media print {
+            .header-container {
+                display: none;
+            }
+            .print-buttons-container {
+                display: none;
+            }
         }
     </style>
 </head>
-
 <body>
-    <div class="logo">
-        <img src="reservaCalendar.png" alt="Reserva Logo" onclick="handleFileSelect()">
+    <div class="header-container">
+        <div class="logo-initial">
+            <img src="voucherMap.png" alt="Reserva Logo" onclick="handleFileSelect()">
+        </div>
+        <h1 class="h1-initial">Vouchers de Media Pension</h1>
+        <h2 class="h2-initial">Listado de Reservas con Map</h2>
     </div>
-    <h1>Reservas que Ingresan Hoy</h1>
     <div id="resultContainer">
-        <h2>Listado de Reservas</h2>
-        <pre id="resultOutput"></pre>
+        <div id="resultOutput"></div>
+        <div class="print-buttons-container">
+            <div class="button-print">
+                <button class="print-button" onclick="printContent()">
+                    <span class="material-symbols-outlined"> print </span>
+                </button>
+            </div>
+            <button id="downloadButton" onclick="saveAsCSV()">Guardar para Voucher</button>
+        </div>
     </div>
 
     <script>
+        var relevantData = [];
+
         function handleFileSelect() {
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
@@ -81,23 +211,10 @@
 
                 reader.onload = () => {
                     const fileContents = reader.result;
-                    const processedData = processData(fileContents);
+                    relevantData = processData(fileContents);
 
                     const resultOutput = document.getElementById('resultOutput');
-                    resultOutput.innerHTML = processedData;
-
-                    const downloadButton = document.getElementById('btnGuardar');
-                    if (!downloadButton) {
-                        const newDownloadButton = document.createElement('button');
-                        newDownloadButton.textContent = 'Guardar como archivo';
-                        newDownloadButton.id = 'btnGuardar';
-                        newDownloadButton.addEventListener('click', () => {
-                            const csvData = addHeadersToCSV(processedData);
-                            downloadCSV(stripHTML(csvData), 'reservas_ingresan.csv');
-                        });
-
-                        resultOutput.appendChild(newDownloadButton);
-                    }
+                    resultOutput.innerHTML = relevantDataToForm(relevantData);
                 };
 
                 reader.readAsText(file);
@@ -106,96 +223,153 @@
             fileInput.click();
         }
 
-        function processData(fileContents) {
-            var lines = fileContents.split('\n');
-            var output = '';
-            var roomCount = {}; // Objeto para contar la cantidad de habitaciones ocupadas
-            var peopleCount = 0; // Variable para contar la cantidad total de personas
+function processData(fileContents) {
+    var lines = fileContents.split('\n');
+    relevantData = []; // <-- Eliminar 'var' para usar la variable global
 
-            for (var i = 1; i < lines.length; i++) {
-                var line = lines[i].trim(); // Elimina espacios en blanco al inicio y final de la línea
+    for (var i = 1; i < lines.length; i++) {
+        var line = lines[i].trim();
 
-                if (line !== '') { // Omitir líneas vacías
-                    var fields = line.split(',');
+        if (line !== '') {
+            var fields = line.split(',');
 
-                    var roomNumber = fields[2];
-                    var passengerName = fields[13];
-                    var services = fields[16];
-                    var state = fields[23];
-                    var din = fields[8];
-                    var dout = fields[9];
-                    var age = fields[14];
-                    var dni = fields[12];
+            var passengerName = fields[13];
+            var services = fields[16];
+            var dni = fields[12];
+            var hotel = fields[1];
+            var dinRaw = fields[8];
+            var doutRaw = fields[9];
+            var din = formatDate(dinRaw);
+            var dout = formatDate(doutRaw);
+            var roomNumber = fields[2];
+            var cantp = fields[5];
+            var stayDuration = calculateStayDuration(dinRaw, doutRaw);
+            var voucher = fields[6];
 
-                    var relevantFields = [
-                        '<b>' + roomNumber + '</b>',
-                        din,
-                        dout,
-                        fields[5],
-                        fields[11],
-                        dni,
-                        '<b>' + passengerName + '</b>',
+            // Validar si el pasajero contrató desayuno
+            if (services.toUpperCase().includes('DESAYUNO')) {
+                continue; // Ignorar pasajero que contrató desayuno
+            }
 
-                        age,
-                        fields[6],
-                        services,
-                        '<span style="color: red;">' + state + '</span>', // Campo 23 con color rojo,
-                        fields[17],
-                        fields[7],
-                        fields[4]
-                    ];
-                    output += relevantFields.join(',') + '\n';
+            // Verificar si el pasajero viene acompañado
+            var isAccompanied = isPassengerAccompanied(relevantData, roomNumber, voucher);
 
-                    if (roomCount[roomNumber]) {
-                        // Si la habitación ya ha sido contada, incrementa el contador de personas
-                        roomCount[roomNumber]++;
-                    } else {
-                        // Si la habitación no ha sido contada, inicializa el contador de personas en 1
-                        roomCount[roomNumber] = 1;
-                    }
+            if (!isAccompanied) {
+                var relevantFields = {
+                    passengerName,
+                    dni,
+                    hotel,
+                    din,
+                    dout,
+                    dinRaw,
+                    doutRaw,
+                    roomNumber,
+                    cantp,
+                    stayDuration,
+                    voucher,
+                    cenaCount: cantp * stayDuration,
+                };
 
-                    peopleCount++;
+                relevantData.push(relevantFields);
+            }
+        }
+    }
+
+    return relevantData;
+}
+
+        function isPassengerAccompanied(relevantData, roomNumber, voucher) {
+            for (var i = 0; i < relevantData.length; i++) {
+                var item = relevantData[i];
+
+                if (item.roomNumber === roomNumber && item.voucher === voucher) {
+                    return true;
                 }
             }
 
-            // Agrega las estadísticas de habitaciones ocupadas y cantidad de personas al output
-            output += 'Habitaciones que se ocupan: ' + Object.keys(roomCount).length + '\n';
-            output += 'Cantidad de pax: ' + peopleCount + '\n';
-
-            return output;
+            return false;
         }
 
-        function addHeadersToCSV(csvData) {
-            var headers = 'Nro. habitación,Fecha de ingreso,Fecha de egreso,Cantidad plazas,Tipo documento,Nro. doc.,Apellido y nombre,Edad,Voucher,Servicio,Estado,Paquete,Sede,Observación habitación\n';
-            return headers + csvData;
+        function formatDate(dateString) {
+            var parts = dateString.split('/');
+            var formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
+            return formattedDate;
         }
 
-        function stripHTML(html) {
-            var temporalDivElement = document.createElement('div');
-            temporalDivElement.innerHTML = html;
+        function calculateStayDuration(dinRaw, doutRaw) {
+            var dinDate = new Date(formatDate(dinRaw));
+            var doutDate = new Date(formatDate(doutRaw));
+            var millisecondsPerDay = 24 * 60 * 60 * 1000;
+            var duration = Math.round((doutDate - dinDate) / millisecondsPerDay);
 
-            // Eliminar el conteo final de habitaciones y pasajeros
-            var lines = temporalDivElement.innerText.split('\n');
-            lines = lines.slice(0, lines.length - 3); // Omitir las últimas dos líneas
-
-            return lines.join('\n');
+            return duration;
         }
 
-        function downloadCSV(csv, filename) {
-            var csvFile = new Blob([csv], { type: 'text/csv' });
+        function relevantDataToForm(relevantData) {
+            var formHTML = '';
 
-            if (window.navigator.msSaveBlob) {
-                // IE 10+
-                window.navigator.msSaveBlob(csvFile, filename);
-            } else {
-                // Otros navegadores
-                var downloadLink = document.createElement('a');
-                downloadLink.href = URL.createObjectURL(csvFile);
-                downloadLink.setAttribute('download', filename);
-                downloadLink.click();
+            for (var i = 0; i < relevantData.length; i++) {
+                var item = relevantData[i];
+
+                formHTML += '<div class="container">';
+                formHTML += '<div class="logo-container"><img src="suteba_logo_3.jpg" alt="Logo"></div>';
+                formHTML += '<h1 class="h1-container">Voucher de Comidas</h1>';
+                formHTML += '<p class="p-cena">Favor de brindar servicio de Cena al siguiente afiliado:</p>';
+                formHTML += '<div class="passengerName"><strong>Nombre:</strong> ' + item.passengerName + '</div>';
+                formHTML += '<div class="dni"><strong>Dni:</strong> ' + item.dni + '</div>';
+                formHTML += '<div class="hotel"><strong>U.Turistica</strong> ' + item.hotel + '</div>';
+                formHTML += '<div class="din"><strong>Ingreso:</strong> ' + item.dinRaw + '</div>';
+                formHTML += '<div class="dout"><strong>Egreso:</strong> ' + item.doutRaw + '</div>';
+                formHTML += '<div class="roomNumber"><strong>Habitacion Nº:</strong> <span class="roomNumberContent">' + item.roomNumber + '</span></div>';
+
+
+                formHTML += '<div class="cantp"><strong>Cant. Pax:</strong> ' + item.cantp + '</div>';
+                formHTML += '<p class="p-servicios"><strong>Servicios a Tomar</strong></p>';
+                formHTML += '<div class="cantMap"><strong>Cant. Comidas:</strong> ' + item.cenaCount + '</div>';
+                formHTML += '<div class="check-container"><img src="MapDay.png" alt="Logo"></div>';
+                formHTML += '</div>';
             }
+
+            return formHTML;
         }
+
+    
+        function saveAsCSV() {
+    if (relevantData.length === 0) {
+        const resultOutput = document.getElementById('resultOutput');
+        resultOutput.textContent = "No hay media pensión contratada";
+        return;
+    }
+
+    var csv = relevantDataToCSV(relevantData);
+    downloadCSV(csv, 'voucher.csv');
+}
+
+
+        function relevantDataToCSV(relevantData) {
+            var csv = 'Nombre Pasajero,Numero Dni,Fecha de Ingreso,Fecha de Egreso,Numero de Habitacion,Cantidad de Personas,Duracion de Estadia\n';
+
+            for (var i = 0; i < relevantData.length; i++) {
+                var item = relevantData[i];
+                csv += item.passengerName + ',' + item.dni + ',' + item.dinRaw + ',' + item.doutRaw + ',' + item.roomNumber + ',' + item.cantp + ',' + item.stayDuration + '\n';
+            }
+
+            return csv;
+        }
+
+        function printContent() {
+            var headerContainer = document.querySelector('.header-container');
+            headerContainer.style.display = 'none';
+            window.print();
+            headerContainer.style.display = 'block';
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+    var downloadButton = document.getElementById("downloadButton");
+    downloadButton.style.display = "none";
+});
+
+
     </script>
 </body>
-
 </html>
