@@ -1,439 +1,205 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Sección de encabezado -->
-    <title>Voucher Balneario</title>
-    <link rel="icon" type="image/png" href="umbrella1.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <meta charset="UTF-8">
-
-    <style>
-        /* Estilos para el cuerpo del documento */
-        body {
-            font-family: Arial, sans-serif;
+  <title>Rendición del Día en Efectivo</title>
+  <link rel="icon" type="image/png" href="pesos.png">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 400px;
+        height: 200px;
+        margin: 50px auto;
+        padding: 20px;
+        font-size: 110%;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
+      
+      #rendicion {
+        font-size: 25px;
+        
+        background-color: #f2f2f2;
+        padding: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+      }
+      
+      .logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        
+        
+      }
+  
+     
+      
+     
+      
+      .image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-bottom: 2px solid transparent; /* Inicialmente, el borde es transparente */
+          transition: border-bottom 0.3s ease; /* Agregamos una transición suave para el borde */
         }
-
-        /* Estilos para el encabezado principal */
-        .h1-initial {
-            text-align: center;
+    
+        .image-container:hover {
+          border-bottom: 4px solid #4CAF50; /* Al hacer hover, el borde se vuelve naranja */
         }
-
-        .h2-initial {
-            text-align: center;
-        }
-
-        .logo-initial {
-            display: flex;
-            justify-content: center;
-            margin: 35px;
-        }
-
-        /* Estilos para el logo inicial */
-        .logo-initial img {
-            width: 70px;
-            cursor: pointer;
-        }
-
-        .button-print {
-            display: flex;
-            justify-content: center;
-        }
-
-        .button-print button {
-            margin: 0 auto;
-        }
-
-        /* Estilos para el número de habitación */
-        .roomNumberContent {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* Estilos para el contenedor principal */
-        .container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            grid-template-rows: repeat(9, auto);
-            gap: 2px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            padding: 5px;
-            margin: 15px;
-            background-color: #f4f4f4;
-            font-size: 11px;
-        }
-
-        /* Estilos para el encabezado del voucher */
-        .h1-container {
-            grid-column: 1 / span 4;
-            grid-row: 1;
-            margin: 0;
-            font-size: 20px;
-            font-family: "Times New Roman", Times, serif;
-            text-transform: uppercase;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        /* Estilos para el logo del voucher */
-        .logo-container img {
-            width: 145px;
-        }
-
-        .logo-container {
-            grid-column: 4 / -1;
-            grid-row: 1;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        /* Estilos para el párrafo de cena */
-        .container .p-cena {
-            grid-column: 1 / span 6;
-            grid-row: 2;
-        }
-
-        /* Estilos para el nombre del pasajero */
-        .container .passengerName {
-            grid-column: 1 / span 4;
-            grid-row: 3;
-            justify-content: center;
-        }
-
-        /* Estilos para el DNI del pasajero */
-        .container .dni {
-            grid-column: 5 / -1;
-            grid-row: 3;
-        }
-
-        /* Estilos para el nombre del hotel */
-        .container .hotel {
-            grid-column: 1 / span 6;
-            grid-row: 4;
-            justify-content: center;
-        }
-
-        /* Estilos para la fecha de ingreso */
-        .container .din {
-            grid-column: 3 / -2;
-            grid-row: 5;
-            justify-content: center;
-        }
-
-        /* Estilos para la fecha de egreso */
-        .container .dout {
-            grid-column: 5 / -1;
-            grid-row: 5;
-        }
-
-        /* Estilos para el número de habitación */
-        .container .roomNumber {
-            grid-column: 1 / span 2;
-            grid-row: 5;
-        }
-
-        /* Estilos para la cantidad de personas */
-        .container .cantp {
-            grid-column: 5 / -1;
-            grid-row: 6;
-        }
-
-        /* Estilos para el párrafo de servicios */
-        .container .p-servicios {
-            grid-column: 1 / span 3;
-            grid-row: 7;
-        }
-
-        /* Estilos para la cantidad de comidas */
-        .container .cantMap {
-            grid-column: 5 / -1;
-            grid-row: 7;
-        }
-
-        /* Estilos para la imagen de check */
-        .check-container img {
-            width: 250px;
-        }
-
-        /* Estilos para el contenedor del check */
-        .check-container {
-            grid-column: 1 / span 6;
-            grid-row: 8;
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        /* Estilos para el contenedor de resultados */
-        #resultContainer {
-            margin: 5px auto;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        /* Estilos para el resultado del voucher */
-        #resultOutput {
-            padding: 10px;
-            white-space: pre-wrap;
-            margin-top: 5px;
-            font-size: 15px;
-            font-family: Arial, sans-serif;
-            text-align: left;
-        }
-
-        #noDataMessage {
-            display: none;
-            text-align: center;
-            margin: 20px;
-            font-size: 25px;
-            font-weight: bold;
-            color: rgb(167, 50, 50);
-        }
-
-        /* Estilos para el icono de impresión */
-        .print-icon {
-            width: 45px;
-            height: 45px;
-            background-image: url('printIconbyn.jpg');
-            background-size: cover;
-            cursor: pointer;
-        }
-
-        .print-buttons-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        @media print {
-            .header-container {
-                display: none;
-            }
-            .print-buttons-container {
-                display: none;
-            }
-        }
-    </style>
+      
+  
+  
+      #btnGuardar {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #btnGuardar:hover {
+        background-color: #45a049;
+      }
+  </style>
 </head>
 <body>
-    <!-- Contenedor del encabezado -->
-    <div class="header-container">
-        <!-- Logo clickeable -->
-        <div class="logo-initial">
-            <img src="umbrellaFront.jpg" alt="beach umbrella" onclick="handleFileSelect()">
-        </div>
-        <h1 class="h1-initial">Vouchers de Balneario</h1>
-        <h2 class="h2-initial">Listado de Reservas con Acceso al Balneario</h2>
+  <div class="card">
+    <div class="image-container">
+      <img class="logo" src="cashTr.png" title="Click para seleccionar Archivo" alt="Suteba Logo" onclick="handleFileSelect()">
     </div>
-    <!-- Contenedor de resultados -->
-    <div id="resultContainer">
-        <!-- Contenedor de los resultados de la consulta -->
-        <div id="resultOutput"></div>
-        <!-- Contenedor con el mensaje de No Reserva -->
-        <div id="noDataMessage">No hay Reservas para generar Voucher para el Balneario!</div>
-        
-        <!-- Contenedor del botón de impresión -->
-        <div class="print-buttons-container">
-            <!-- Icono de impresión -->
-            <div class="print-icon" onclick="printContent()"></div>
-        </div>
-    </div>
+    <h1>Rendición Caja Diaria</h1>
+    <p id="rendicion"></p>
+    <button id="btnGuardar" onclick="guardarPlanillaIngreso()">Guardar para Planilla de Ingresos</button>
+  </div>
 
-    <script>
-        // Variable global para almacenar los datos relevantes del archivo CSV
-    var relevantData = [];
+  <script>
+    // Agrega este arreglo al principio del script
+    let cajaSeccionalData = [];
+    let efectivoSum = 0; // Variable para almacenar la suma de valores en "Caja Seccional"
+    let tarjetaSum = 0; // Variable para almacenar la suma de valores en otras formas de pago
+    let lines; // Variable para almacenar los datos originales del archivo CSV
 
-    // Función que maneja la selección de un archivo CSV
     function handleFileSelect() {
-        // Crear un elemento input tipo "file" para seleccionar el archivo CSV
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = '.csv';
-        fileInput.addEventListener('change', (event) => {
-            // Cuando se selecciona un archivo, leer su contenido
-            const file = event.target.files[0];
-            const reader = new FileReader();
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.csv';
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
 
-            reader.onload = () => {
-                // Procesar el contenido del archivo CSV y almacenar los datos relevantes
-                const fileContents = reader.result;
-                relevantData = processData(fileContents);
+        // Especificamos la codificación UTF-8 para evitar problemas con caracteres especiales
+        reader.readAsText(file, 'UTF-8');
 
-                // Actualizar la salida en la página según los datos relevantes obtenidos
-                const resultOutput = document.getElementById('resultOutput');
-                const noDataMessage = document.getElementById('noDataMessage');
+        reader.onload = () => {
+          lines = reader.result.split('\n');
 
-                if (relevantData.length === 0) {
-                    resultOutput.innerHTML = ''; // Limpiar cualquier contenido existente
-                    noDataMessage.style.display = 'block'; // Mostrar mensaje si no hay datos relevantes
+          for (let i = 1; i < lines.length; i++) {
+            const columns = lines[i].split(',');
+            if (columns.length >= 10) { // Asegúrate de que el archivo CSV tenga al menos 10 columnas
+              const nroRecibo = columns[0];
+              const fechaRecibo = columns[4];
+              const nombre = columns[1];
+              const importe = parseFloat(columns[5].replace(',', '.'));
+              const medioCobranza = columns[3];
+              const notaCredito = columns[8];
+              const referencia = columns[6]; // Mantenemos la referencia como cadena de texto
+              const usuarioAlta = columns[7];
+              const lote = ''; // Columna Lote vacía
+              const cupon = ''; // Columna Cupon vacía
+
+              if (!isNaN(importe)) {
+                if (columns[3] && columns[3].trim() === 'Caja Seccional') {
+                  efectivoSum += importe;
+                  // Almacena los datos en el arreglo
+                  cajaSeccionalData.push({
+                    nroRecibo,
+                    fechaRecibo,
+                    nombre,
+                    notaCredito,
+                    referencia,
+                    importe,
+                    medioCobranza,
+                    usuarioAlta,
+                    lote,
+                    cupon
+                  });
                 } else {
-                    resultOutput.innerHTML = relevantDataToForm(relevantData);
-                    noDataMessage.style.display = 'none';
+                  tarjetaSum += importe;
                 }
-            };
-
-            // Leer el archivo como texto
-            reader.readAsText(file);
-        });
-
-        // Hacer clic en el elemento input oculto para abrir el diálogo de selección de archivo
-        fileInput.click();
-    }
-
-function processData(fileContents) {
-    var lines = fileContents.split('\n');
-    relevantData = []; // <-- Eliminar 'var' para usar la variable global
-
-    for (var i = 1; i < lines.length; i++) {
-        var line = lines[i].trim();
-
-        if (line !== '') {
-            var fields = line.split(',');
-
-            // Extraer los campos relevantes del archivo CSV
-            var passengerName = fields[13];
-            // var services = fields[16]; // No necesitamos esta variable
-            var dni = fields[12];
-            var hotel = fields[1];
-            var dinRaw = fields[8];
-            var doutRaw = fields[9];
-            var din = formatDate(dinRaw);
-            var dout = formatDate(doutRaw);
-            var roomNumber = fields[2];
-            var cantp = fields[5];
-            var stayDuration = calculateStayDuration(dinRaw, doutRaw);
-            var voucher = fields[6];
-
-            // Validar si el pasajero contrató desayuno
-            // if (services.toUpperCase().includes('DESAYUNO')) {
-            //     continue; // Ignorar pasajero que contrató desayuno
-            // }
-
-            // Verificar si el pasajero viene acompañado
-            var isAccompanied = isPassengerAccompanied(relevantData, roomNumber, voucher);
-
-            if (!isAccompanied) {
-                var relevantFields = {
-                    passengerName,
-                    dni,
-                    hotel,
-                    din,
-                    dout,
-                    dinRaw,
-                    doutRaw,
-                    roomNumber,
-                    cantp,
-                    stayDuration,
-                    voucher,
-                    cenaCount: cantp * stayDuration,
-                };
-
-                relevantData.push(relevantFields);
+              }
             }
-        }
+          }
+
+          const totalSum = efectivoSum + tarjetaSum;
+
+          const rendicionElement = document.getElementById('rendicion');
+          rendicionElement.innerHTML = `
+            Efectivo: $${efectivoSum.toFixed(2)}<br>
+            Tarjeta: $${tarjetaSum.toFixed(2)}<br>
+            Total de recaudación: $${totalSum.toFixed(2)}
+          `;
+        };
+      });
+
+      fileInput.click();
     }
 
-    return relevantData;
+   function guardarPlanillaIngreso() {
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  // Agregamos la primera fila que contiene los nombres de las columnas
+  csvContent += 'Nro. recibo, Fecha recibo, Nombre, Nota crédito, Referencia, Lote, Cupon, Importe, Medio de cobranza, Usuario alta\n';
+
+  // Recorremos los datos originales del archivo CSV en orden inverso y los convertimos en filas CSV
+  for (let i = lines.length - 1; i >= 1; i--) {
+    const columns = lines[i].split(',');
+    if (columns.length >= 10) { // Asegúrate de que el archivo CSV tenga al menos 10 columnas
+      const nroRecibo = columns[0];
+      const fechaRecibo = columns[4];
+      const nombre = columns[1];
+      const importe = parseFloat(columns[5].replace(',', '.'));
+      const medioCobranza = columns[3];
+      const notaCredito = columns[8];
+      const referencia = columns[6]; // Mantenemos la referencia como cadena de texto
+      const usuarioAlta = columns[7];
+      const lote = ''; // Columna Lote vacía
+      const cupon = ''; // Columna Cupon vacía
+
+      // Escapamos las comas en los valores para evitar conflictos con el formato CSV
+      const fila = `${nroRecibo}, ${fechaRecibo}, ${nombre}, ${notaCredito}, "${referencia}", ${lote}, ${cupon}, ${importe}, ${medioCobranza}, ${usuarioAlta}\n`;
+      csvContent += fila;
+    }
+  }
+
+  // Creamos un Blob con el contenido CSV
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', 'planilla_ingreso.csv');
+  link.style.display = 'none'; // Ocultamos el enlace en pantalla
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link); // Removemos el enlace después de la descarga
 }
 
 
+  </script>
 
-    // Función para verificar si un pasajero está acompañado
-    function isPassengerAccompanied(relevantData, roomNumber, voucher) {
-        for (var i = 0; i < relevantData.length; i++) {
-            var item = relevantData[i];
-
-            if (item.roomNumber === roomNumber && item.voucher === voucher) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // Función para formatear una fecha en formato "dd/mm/yyyy" a "yyyy/mm/dd"
-    function formatDate(dateString) {
-        var parts = dateString.split('/');
-        var formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
-        return formattedDate;
-    }
-
-    // Función para calcular la duración de la estancia en días
-    function calculateStayDuration(dinRaw, doutRaw) {
-        var dinDate = new Date(formatDate(dinRaw));
-        var doutDate = new Date(formatDate(doutRaw));
-        var millisecondsPerDay = 24 * 60 * 60 * 1000;
-        var duration = Math.round((doutDate - dinDate) / millisecondsPerDay);
-
-        return duration;
-    }
-
-    // Función para convertir los datos relevantes a una forma HTML
-    function relevantDataToForm(relevantData) {
-        var formHTML = '';
-
-        for (var i = 0; i < relevantData.length; i++) {
-            var item = relevantData[i];
-
-            // Generar el código HTML para cada elemento relevante del archivo CSV
-            formHTML += '<div class="container">';
-            formHTML += '<div class="logo-container"><img src="suteba_logo_3.jpg" alt="Logo"></div>';
-            formHTML += '<h1 class="h1-container">Voucher de Balneario</h1>';
-            formHTML += '<p class="p-cena">Favor de brindar acceso al Balneario al siguiente afiliado:</p>';
-            formHTML += '<div class="passengerName"><strong>Nombre:</strong> ' + item.passengerName + '</div>';
-            formHTML += '<div class="dni"><strong>Dni:</strong> ' + item.dni + '</div>';
-            formHTML += '<div class="hotel"><strong>U.Turistica</strong> ' + item.hotel + '</div>';
-            formHTML += '<div class="din"><strong>Ingreso:</strong> ' + item.dinRaw + '</div>';
-            formHTML += '<div class="dout"><strong>Egreso:</strong> ' + item.doutRaw + '</div>';
-            formHTML += '<div class="roomNumber"><strong>Habitacion Nº:</strong> <span class="roomNumberContent">' + item.roomNumber + '</span></div>';
-            formHTML += '<div class="cantp"><strong>Cant. Pax:</strong> ' + item.cantp + '</div>';
-            formHTML += '<p class="p-servicios"><strong>Servicios a Tomar</strong></p>';
-            formHTML += '<div class="cantMap"><strong>Cant. Días:</strong> ' + item.stayDuration + '</div>';
-            formHTML += '<div class="check-container"><img src="MapDay.png" alt="Logo"></div>';
-            formHTML += '</div>';
-        }
-
-        return formHTML;
-    }
-
-    // Función para guardar los datos relevantes como archivo CSV
-    function saveAsCSV() {
-        if (relevantData.length === 0) {
-            const resultOutput = document.getElementById('resultOutput');
-            resultOutput.textContent = "No hay media pensión contratada";
-            return;
-        }
-
-        var csv = relevantDataToCSV(relevantData);
-        downloadCSV(csv, 'voucher.csv');
-    }
-
-    // Función para convertir los datos relevantes a formato CSV
-    function relevantDataToCSV(relevantData) {
-        var csv = 'Nombre Pasajero,Numero Dni,Fecha de Ingreso,Fecha de Egreso,Numero de Habitacion,Cantidad de Personas,Duracion de Estadia\n';
-
-        for (var i = 0; i < relevantData.length; i++) {
-            var item = relevantData[i];
-            csv += item.passengerName + ',' + item.dni + ',' + item.dinRaw + ',' + item.doutRaw + ',' + item.roomNumber + ',' + item.cantp + ',' + item.stayDuration + '\n';
-        }
-
-        return csv;
-    }
-
-    // Función para imprimir el contenido relevante
-    function printContent() {
-        var headerContainer = document.querySelector('.header-container');
-        headerContainer.style.display = 'none';
-        window.print();
-        headerContainer.style.display = 'block';
-    }
-
-    // Evento que se dispara cuando se ha cargado todo el contenido HTML y se puede interactuar con el DOM
-    document.addEventListener("DOMContentLoaded", function () {
-        // Ocultar el botón de descarga al cargar la página
-        var downloadButton = document.getElementById("downloadButton");
-        downloadButton.style.display = "none";
-    });
-    </script>
 </body>
 </html>

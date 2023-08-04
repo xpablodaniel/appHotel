@@ -5,70 +5,91 @@
   <link rel="icon" type="image/png" href="pesos.png">
   <style>
     body {
-      font-family: Arial, sans-serif;
-    }
-    .card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 400px;
-      height: 200px;
-      margin: 50px auto;
-      padding: 20px;
-      font-size: 110%;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    #rendicion {
-      font-size: 25px;
+        font-family: Arial, sans-serif;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 400px;
+        height: 200px;
+        margin: 50px auto;
+        padding: 20px;
+        font-size: 110%;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
       
-      background-color: #f2f2f2;
-      padding: 5px;
-      border: 1px solid #ccc;
-      margin-top: 5px;
-    }
+      #rendicion {
+        font-size: 25px;
+        
+        background-color: #f2f2f2;
+        padding: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+      }
+      
+      .logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        
+        
+      }
+  
+     
+      
+     
+      
+      .image-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-bottom: 2px solid transparent; /* Inicialmente, el borde es transparente */
+          transition: border-bottom 0.3s ease; /* Agregamos una transición suave para el borde */
+        }
     
-    .logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 70px;
-      height: 70px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    .logo:hover {
-      width: 75px;
-      height: 75px;
-    }
-    #btnGuardar {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    #btnGuardar:hover {
-      background-color: #45a049;
-    }
+        .image-container:hover {
+          border-bottom: 4px solid #4CAF50; /* Al hacer hover, el borde se vuelve naranja */
+        }
+      
+  
+  
+      #btnGuardar {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #btnGuardar:hover {
+        background-color: #45a049;
+      }
   </style>
 </head>
 <body>
   <div class="card">
-    <img class="logo" src="cashTr.png" alt="Suteba Logo" onclick="handleFileSelect()">
+    <div class="image-container">
+      <img class="logo" src="cashTr.png" title="Click para seleccionar Archivo" alt="Suteba Logo" onclick="handleFileSelect()">
+    </div>
     <h1>Rendición Caja Diaria</h1>
     <p id="rendicion"></p>
     <button id="btnGuardar" onclick="guardarPlanillaIngreso()">Guardar para Planilla de Ingresos</button>
   </div>
 
-
-<script>
+  <script>
     // Agrega este arreglo al principio del script
     let cajaSeccionalData = [];
     let efectivoSum = 0; // Variable para almacenar la suma de valores en "Caja Seccional"
@@ -180,9 +201,9 @@
 
   </script>
 
-  
 </body>
 </html>
+
 
 
 
